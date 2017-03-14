@@ -3,11 +3,217 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Temperature"
+    xmlns:vm="using:Temperature.ViewModel"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    RequestedTheme="Dark">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.DataContext>
+        <vm:TemperatureViewModel x:Name="ViewModel" />
+    </Page.DataContext>
 
+    <Page.Resources>
+        <x:Double x:Key="DashboardFontSize">25</x:Double>
+        <Thickness x:Key="BorderThickness">2</Thickness>
+        <Thickness x:Key="BorderMargin">3,3,3,3</Thickness>
+        <SolidColorBrush x:Key="BorderColor">#FF0063B1</SolidColorBrush>
+        <SolidColorBrush x:Key="DashboardHeaderTextColor">#FF0063B1</SolidColorBrush>
+        <SolidColorBrush x:Key="DashboardTextColor">White</SolidColorBrush>
+        <SolidColorBrush x:Key="DisplayHeaderTextColor">Yellow</SolidColorBrush>
+        <SolidColorBrush x:Key="DisplayTextColor">White</SolidColorBrush>
+    </Page.Resources>
+
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+
+        <!-- Dashboard -->
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Total Attempts -->
+            <Border Grid.Column="0"
+                    Grid.Row="0"
+                    BorderBrush="{StaticResource BorderColor}"
+                    BorderThickness="{StaticResource BorderThickness}"
+                    Margin="{StaticResource BorderMargin}">
+                <TextBlock Text="Attempts"
+                           FontSize="{StaticResource DashboardFontSize}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           TextWrapping="WrapWholeWords"
+                           Foreground="{StaticResource DashboardHeaderTextColor}" />
+            </Border>
+            <Border Grid.Column="0"
+                    Grid.Row="1"
+                    BorderBrush="{StaticResource BorderColor}"
+                    BorderThickness="{StaticResource BorderThickness}"
+                    Margin="3,3,3,3">
+                <TextBlock Text="{Binding TotalAttempts, Mode=OneWay}"
+                           FontSize="{StaticResource DashboardFontSize}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           TextWrapping="WrapWholeWords"
+                           Foreground="{StaticResource DashboardTextColor}" />
+            </Border>
+
+            <!-- Average Retries -->
+            <Border Grid.Column="1"
+                    Grid.Row="0"
+                    BorderBrush="{StaticResource BorderColor}"
+                    BorderThickness="{StaticResource BorderThickness}"
+                    Margin="{StaticResource BorderMargin}">
+                <TextBlock Text="Average Retries"
+                           FontSize="{StaticResource DashboardFontSize}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           TextWrapping="WrapWholeWords"
+                           Foreground="{StaticResource DashboardHeaderTextColor}" />
+            </Border>
+            <Border Grid.Column="1"
+                    Grid.Row="1"
+                    BorderBrush="{StaticResource BorderColor}"
+                    BorderThickness="{StaticResource BorderThickness}"
+                    Margin="3,3,3,3">
+                <TextBlock Text="{Binding AverageRetries, Mode=OneWay}"
+                           FontSize="{StaticResource DashboardFontSize}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           TextWrapping="WrapWholeWords"
+                           Foreground="{StaticResource DashboardTextColor}" />
+            </Border>
+
+            <!-- Total Successful -->
+            <Border Grid.Column="2"
+                    Grid.Row="0"
+                    BorderBrush="{StaticResource BorderColor}"
+                    BorderThickness="{StaticResource BorderThickness}"
+                    Margin="{StaticResource BorderMargin}">
+                <TextBlock Text="Successful Readings"
+                           FontSize="{StaticResource DashboardFontSize}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           TextWrapping="WrapWholeWords"
+                           Foreground="{StaticResource DashboardHeaderTextColor}" />
+            </Border>
+            <Border Grid.Column="2"
+                    Grid.Row="1"
+                    BorderBrush="{StaticResource BorderColor}"
+                    BorderThickness="{StaticResource BorderThickness}"
+                    Margin="3,3,3,3">
+                <TextBlock Text="{Binding TotalSuccess, Mode=OneWay}"
+                           FontSize="{StaticResource DashboardFontSize}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           TextWrapping="WrapWholeWords"
+                           Foreground="{StaticResource DashboardTextColor}" />
+            </Border>
+
+            <!-- Successful Percentage -->
+            <Border Grid.Column="3"
+                    Grid.Row="0"
+                    BorderBrush="{StaticResource BorderColor}"
+                    BorderThickness="{StaticResource BorderThickness}"
+                    Margin="{StaticResource BorderMargin}">
+                <TextBlock Text="Percent Successful"
+                           FontSize="{StaticResource DashboardFontSize}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           TextWrapping="WrapWholeWords"
+                           Foreground="{StaticResource DashboardHeaderTextColor}" />
+            </Border>
+            <Border Grid.Column="3"
+                    Grid.Row="1"
+                    BorderBrush="{StaticResource BorderColor}"
+                    BorderThickness="{StaticResource BorderThickness}"
+                    Margin="3,3,3,3">
+                <TextBlock Text="{Binding PercentSuccess, Mode=OneWay}"
+                           FontSize="{StaticResource DashboardFontSize}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           TextWrapping="WrapWholeWords"
+                           Foreground="{StaticResource DashboardTextColor}" />
+            </Border>
+            
+        </Grid>
+
+        <!-- Display -->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Temperature -->
+            <TextBlock Grid.Column="0"
+                       Grid.Row="0"
+                       Text="Temperature"
+                       FontSize="50"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Center"
+                       Foreground="{StaticResource DisplayHeaderTextColor}" />
+            <TextBlock Grid.Column="0"
+                       Grid.Row="1"
+                       Text="{Binding Temperature, Mode=OneWay}"
+                       FontSize="90"
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Center"
+                       Margin="10,10,10,10"
+                       Foreground="{StaticResource DisplayTextColor}" />
+
+            <!-- Humidity -->
+            <TextBlock Grid.Column="1"
+                       Grid.Row="0"
+                       Text="Humidity"
+                       FontSize="50"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Center"
+                       Foreground="{StaticResource DisplayHeaderTextColor}" />
+            <TextBlock Grid.Column="1"
+                       Grid.Row="1"
+                       Text="{Binding Humidity, Mode=OneWay}"
+                       FontSize="90"
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Center"
+                       Margin="10,10,10,10"
+                       Foreground="{StaticResource DisplayTextColor}" />
+
+            <!-- Last Updated -->
+            <TextBlock Grid.Column="0"
+                       Grid.Row="2"
+                       Text="Last Updated:"
+                       FontSize="35"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right"
+                       Foreground="{StaticResource DisplayHeaderTextColor}"
+                       Margin="0,0,20,0" />
+            <TextBlock Grid.Column="1"
+                       Grid.Row="2"
+                       Text="{Binding LastUpdated, Mode=OneWay}"
+                       FontSize="35"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Margin="20,0,0,0"
+                       Foreground="{StaticResource DisplayTextColor}" />
+        </Grid>
     </Grid>
 </Page>

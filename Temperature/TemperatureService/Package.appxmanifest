@@ -30,6 +30,6 @@
     </Application>
   </Applications>
   <Capabilities>
-    <Capability Name="internetClientServer" />
+    <Capability Name="internetClient" />
   </Capabilities>
 </Package>

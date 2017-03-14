@@ -15,6 +15,11 @@ using Windows.Storage.Streams;
 using System.IO;
 using Restup.Webserver.Rest;
 using Restup.Webserver.Http;
+using Windows.ApplicationModel.AppService;
+using Windows.Foundation.Collections;
+using Windows.Networking;
+using Newtonsoft.Json;
+using Windows.Networking.Connectivity;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
@@ -24,9 +29,7 @@ namespace TemperatureService
     {
         private IDht dht = null;
         private GpioPin pin = null;
-        private ThreadPoolTimer timer;
-
-        private DhtReading reading;
+        private ThreadPoolTimer timer;        
 
         public void Run(IBackgroundTaskInstance taskInstance)
         {
@@ -39,18 +42,17 @@ namespace TemperatureService
             pin = controller.OpenPin(17, GpioSharingMode.Exclusive);
             dht = new Dht22(pin, GpioPinDriveMode.Input);
 
-            timer = ThreadPoolTimer.CreatePeriodicTimer(Timer_Tick, TimeSpan.FromMilliseconds(500));            
+            timer = ThreadPoolTimer.CreatePeriodicTimer(Timer_Tick, TimeSpan.FromMilliseconds(2));            
         }
 
         private async void Timer_Tick(ThreadPoolTimer e)
         {            
-            reading = await dht.GetReadingAsync().AsTask();
+            var reading = await dht.GetReadingAsync().AsTask();
 
             if (reading.IsValid)
             {
-                Debug.WriteLine($"{DateTime.Now} - Temperature: {reading.Temperature}, Humidity: {reading.Humidity}");
+                Debug.WriteLine($"{DateTime.Now} - Temperature: {reading.Temperature}, Humidity: {reading.Humidity}");                
             }
-        }
-
+        }        
     }
 }
