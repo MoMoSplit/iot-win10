@@ -1,0 +1,19 @@
+﻿@model IEnumerable<TemperatureWeb.Models.TemperatureEntity>
+@{
+    ViewBag.Title = "Chart";
+}
+
+<h2>Index</h2>
+
+@if(Model.Count() > 0)
+{
+    <p>
+        Min temperature: 
+        @Model.Min(x => x.temperature)
+    </p>
+    <p>
+        Count: 
+        @Model.Count()
+    </p>
+}
+

@@ -1,24 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temperature", "Temperature\Temperature.csproj", "{F807EF09-7579-411E-9657-6727755A81AC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sensors.Dht", "Sensors.Dht\Sensors.Dht.vcxproj", "{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemperatureService", "TemperatureService\TemperatureService.csproj", "{E34766F8-3CA4-4881-A4FD-B71595DAE98D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemperatureWeb", "TemperatureWeb\TemperatureWeb.csproj", "{C280B6B6-7307-487D-A1FD-D19B9797E05A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|ARM = Release|ARM
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F807EF09-7579-411E-9657-6727755A81AC}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{F807EF09-7579-411E-9657-6727755A81AC}.Debug|ARM.ActiveCfg = Debug|ARM
 		{F807EF09-7579-411E-9657-6727755A81AC}.Debug|ARM.Build.0 = Debug|ARM
 		{F807EF09-7579-411E-9657-6727755A81AC}.Debug|ARM.Deploy.0 = Debug|ARM
@@ -28,6 +31,7 @@ Global
 		{F807EF09-7579-411E-9657-6727755A81AC}.Debug|x86.ActiveCfg = Debug|x86
 		{F807EF09-7579-411E-9657-6727755A81AC}.Debug|x86.Build.0 = Debug|x86
 		{F807EF09-7579-411E-9657-6727755A81AC}.Debug|x86.Deploy.0 = Debug|x86
+		{F807EF09-7579-411E-9657-6727755A81AC}.Release|Any CPU.ActiveCfg = Release|x86
 		{F807EF09-7579-411E-9657-6727755A81AC}.Release|ARM.ActiveCfg = Release|ARM
 		{F807EF09-7579-411E-9657-6727755A81AC}.Release|ARM.Build.0 = Release|ARM
 		{F807EF09-7579-411E-9657-6727755A81AC}.Release|ARM.Deploy.0 = Release|ARM
@@ -37,36 +41,36 @@ Global
 		{F807EF09-7579-411E-9657-6727755A81AC}.Release|x86.ActiveCfg = Release|x86
 		{F807EF09-7579-411E-9657-6727755A81AC}.Release|x86.Build.0 = Release|x86
 		{F807EF09-7579-411E-9657-6727755A81AC}.Release|x86.Deploy.0 = Release|x86
+		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Debug|ARM.ActiveCfg = Debug|ARM
 		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Debug|ARM.Build.0 = Debug|ARM
 		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Debug|x64.ActiveCfg = Debug|x64
 		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Debug|x64.Build.0 = Debug|x64
 		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Debug|x86.ActiveCfg = Debug|Win32
 		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Debug|x86.Build.0 = Debug|Win32
+		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Release|Any CPU.ActiveCfg = Release|Win32
 		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Release|ARM.ActiveCfg = Release|ARM
 		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Release|ARM.Build.0 = Release|ARM
 		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Release|x64.ActiveCfg = Release|x64
 		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Release|x64.Build.0 = Release|x64
 		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Release|x86.ActiveCfg = Release|Win32
 		{2CD70A4F-9EED-4CDA-9E07-1A2BD33B4976}.Release|x86.Build.0 = Release|Win32
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Debug|ARM.ActiveCfg = Debug|ARM
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Debug|ARM.Build.0 = Debug|ARM
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Debug|ARM.Deploy.0 = Debug|ARM
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Debug|x64.ActiveCfg = Debug|x64
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Debug|x64.Build.0 = Debug|x64
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Debug|x64.Deploy.0 = Debug|x64
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Debug|x86.ActiveCfg = Debug|x86
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Debug|x86.Build.0 = Debug|x86
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Debug|x86.Deploy.0 = Debug|x86
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Release|ARM.ActiveCfg = Release|ARM
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Release|ARM.Build.0 = Release|ARM
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Release|ARM.Deploy.0 = Release|ARM
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Release|x64.ActiveCfg = Release|x64
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Release|x64.Build.0 = Release|x64
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Release|x64.Deploy.0 = Release|x64
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Release|x86.ActiveCfg = Release|x86
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Release|x86.Build.0 = Release|x86
-		{E34766F8-3CA4-4881-A4FD-B71595DAE98D}.Release|x86.Deploy.0 = Release|x86
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Debug|ARM.Build.0 = Debug|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Debug|x64.Build.0 = Debug|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Debug|x86.Build.0 = Debug|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Release|ARM.ActiveCfg = Release|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Release|ARM.Build.0 = Release|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Release|x64.ActiveCfg = Release|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Release|x64.Build.0 = Release|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Release|x86.ActiveCfg = Release|Any CPU
+		{C280B6B6-7307-487D-A1FD-D19B9797E05A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
