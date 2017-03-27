@@ -1,19 +1,123 @@
 ﻿@model IEnumerable<TemperatureWeb.Models.TemperatureEntity>
 @{
     ViewBag.Title = "Chart";
+
+    var minTemperature = Model.Min(x => x.temperature);
+    var maxTemperature = Model.Max(x => x.temperature);
+    var averageTemperature = Math.Round(Model.Average(x => x.temperature), 2);
+
+    var minHumidity = Model.Min(x => x.humidity);
+    var maxHumidity = Model.Max(x => x.humidity);
+    var averageHumidity = Math.Round(Model.Average(x => x.humidity));
 }
 
-<h2>Index</h2>
+@section styles{
 
-@if(Model.Count() > 0)
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+    <style>
+        .telelabel {
+            font-weight: bold;
+            font-size: larger;
+        }
+
+        .teledata {
+            font-weight: bold;
+            font-size: x-large;
+        }
+
+    </style>
+
+}
+
+<h2>Temperature & Humidity data</h2>
+
+@if (Model.Count() > 0)
 {
-    <p>
-        Min temperature: 
-        @Model.Min(x => x.temperature)
-    </p>
-    <p>
-        Count: 
-        @Model.Count()
-    </p>
+    <div class="row">
+
+        <div class="col-md-6 col-xs-12">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Temperature</div>
+                <div class="panel-body">
+
+                    <div class="form-group">
+                        @Html.Label("Min temperature", new { @class = "col-md-8 control-label telelabel" })
+                        <div class="col-md-10 teledata">
+                            @minTemperature.ToString("F2") &deg;C
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Max temperature", new { @class = "col-md-8 control-label telelabel" })
+                        <div class="col-md-10 teledata">
+                            @maxTemperature.ToString("F2") &deg;C
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Average temperature", new { @class = "col-md-8 control-label telelabel" })
+                        <div class="col-md-10 teledata">
+                            @averageTemperature.ToString("F2") &deg;C
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-6 col-xs-12">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Humidity</div>
+                <div class="panel-body">
+                    
+                    <div class="form-group">
+                        @Html.Label("Min humidity", new { @class = "col-md-8 control-label telelabel" })
+                        <div class="col-md-10 teledata">
+                            @minHumidity.ToString("F2") %
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Max humidity", new { @class = "col-md-8 control-label telelabel" })
+                        <div class="col-md-10 teledata">
+                            @maxHumidity.ToString("F2") %
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Average humidity", new { @class = "col-md-8 control-label telelabel" })
+                        <div class="col-md-10 teledata">
+                            @averageHumidity.ToString("F2") %
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>    
 }
 
+<h4>Count: @Model.Count()</h4>
+<hr />
+
+<div class="row">
+    <div id="temperatureChart">
+
+    </div>
+</div>
+
+<input id="charUrl" type="hidden" data-url="@Url.Action("GetLastHour", "Temperature")" />
+
+@section scripts{
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>    
+
+    @Scripts.Render("~/bundles/chart")
+}

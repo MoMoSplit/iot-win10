@@ -12,11 +12,18 @@ namespace TemperatureWeb
                         "~/Scripts/jquery-{version}.js",
                         "~/Scripts/jquery.unobtrusive-ajax.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/moment").Include(
+                       "~/Scripts/moment.js",
+                       "~/Scripts/moment-with-locales.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/signalR-scripts").Include(
                        "~/Scripts/jquery.signalR-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
                         "~/Scripts/script.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/chart").Include(
+                        "~/Scripts/chartService.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));

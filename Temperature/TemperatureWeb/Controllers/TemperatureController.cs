@@ -21,7 +21,7 @@ namespace TemperatureWeb.Controllers
         [HttpGet]
         public async Task<ActionResult> Chart()
         {
-            string userDeviceKey = await GetUserDeviceId();
+            var userDeviceKey = await GetUserDeviceId();
 
             var storageAccount = CloudStorageAccount.Parse(Properties.Settings.Default.StorageConnectionString);
             var tableClient = storageAccount.CreateCloudTableClient();
@@ -30,7 +30,7 @@ namespace TemperatureWeb.Controllers
             var query = new TableQuery<TemperatureEntity>()
                 .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, userDeviceKey));
 
-            var data = table.ExecuteQuery(query).ToList().Where(x => x.temperature != 0 && x.humidity != 0);
+            var data = table.ExecuteQuery(query).Where(x => x.temperature != 0 && x.humidity != 0).ToList();
 
             return View(data);
         }        
@@ -39,6 +39,34 @@ namespace TemperatureWeb.Controllers
         public ActionResult Current()
         {            
             return View();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetLastHour()
+        {
+            var userDeviceKey = await GetUserDeviceId();
+
+            var storageAccount = CloudStorageAccount.Parse(Properties.Settings.Default.StorageConnectionString);
+            var tableClient = storageAccount.CreateCloudTableClient();
+
+            var table = tableClient.GetTableReference("Temperature");
+            var query = new TableQuery<TemperatureEntity>()
+                .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, userDeviceKey));
+
+            var data = table.ExecuteQuery(query)                   
+                .Where(x => x.temperature != 0 && x.humidity != 0)
+                .GroupBy(x => new { date = new DateTime(x.time.Year, x.time.Month, x.time.Day, x.time.Hour, 0, 0) })
+                .OrderByDescending(x => x.Key.date)
+                .Take(50)
+                .Select(x => new
+                {
+                    time = x.Key.date,
+                    temperature = Math.Round(x.Average(t => t.temperature), 2),
+                    humidity = Math.Round(x.Average(h => h.humidity), 2)
+                })
+                .ToList();
+
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -67,14 +95,7 @@ namespace TemperatureWeb.Controllers
 
         private async Task SendMessageToDevice(string message)
         {
-            var userDeviceKey = string.Empty;
-            var userId = User.Identity.GetUserId();
-
-            using (var context = IoTDbContext.Create())
-            {
-                var device = await context.Devices.FirstOrDefaultAsync(d => d.ApplicationUserId == userId);
-                userDeviceKey = device.Key;
-            }
+            var userDeviceKey = await GetUserDeviceId();
 
             var serviceClient = ServiceClient.CreateFromConnectionString(Config.ConnectionString);
             var commandMessage = new Message(Encoding.UTF8.GetBytes(message));

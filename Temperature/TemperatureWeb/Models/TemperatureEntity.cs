@@ -7,7 +7,7 @@ using System.Web;
 
 namespace TemperatureWeb.Models
 {
-    public class TemperatureEntity : TableEntity
+    public class TemperatureEntity : TableEntity, IComparable
     {        
         public string deviceId { get; set; }
         public double temperature { get; set; }
@@ -24,6 +24,11 @@ namespace TemperatureWeb.Models
         {
             this.PartitionKey = deviceId;
             this.RowKey = time.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public int CompareTo(object obj)
+        {
+            return this.CompareTo(((TemperatureEntity)obj).time);
         }
     }
 }

@@ -42,10 +42,12 @@ namespace Temperature
 
         private GpioPin sensorPin = null;
         private GpioPin ledPin = null;
-        private GpioPin relayPin = null;
+        private GpioPin isRelayPin = null;
 
         private DispatcherTimer timer = new DispatcherTimer();
+
         private List<int> retries = new List<int>();
+        private bool relayOn = false;
 
         public MainPage()
         {
@@ -55,7 +57,7 @@ namespace Temperature
             timer.Tick += _timer_Tick;
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
@@ -69,11 +71,11 @@ namespace Temperature
             ledPin = controller.OpenPin(LED_PIN_NUM, GpioSharingMode.Exclusive);
             ledPin.SetDriveMode(GpioPinDriveMode.Output);
 
-            relayPin = controller.OpenPin(RELAY_PIN_NUM, GpioSharingMode.Exclusive);
-            relayPin.SetDriveMode(GpioPinDriveMode.Output);
+            isRelayPin = controller.OpenPin(RELAY_PIN_NUM, GpioSharingMode.Exclusive);
+            isRelayPin.SetDriveMode(GpioPinDriveMode.Output);
 
             registryManager = RegistryManager.CreateFromConnectionString(Config.ConnectionString);
-            await AddDeviceAsync();
+                        
             ReceiveDataFromAzure();
 
             timer.Start();
@@ -82,20 +84,22 @@ namespace Temperature
         private async void _timer_Tick(object sender, object e)
         {
             var vm = this.DataContext as TemperatureViewModel;
-            var reading = await dht.GetReadingAsync().AsTask();   
+            var dhtData = await dht.GetReadingAsync().AsTask();   
             
-            if(reading.IsValid)
+            if(dhtData.IsValid)
             {
-                retries.Add(reading.RetryCount);
+                retries.Add(dhtData.RetryCount);
 
-                vm.Humidity = reading.Humidity;
-                vm.Temperature = reading.Temperature;
+                vm.Humidity = dhtData.Humidity;
+                vm.Temperature = dhtData.Temperature;
                 vm.AverageRetries = retries.Average();                
                 vm.TotalSuccess++;
 
-                Debug.WriteLine($"{DateTime.Now} - Temperature: {reading.Temperature}, Humidity: {reading.Humidity}");
+                Debug.WriteLine($"{DateTime.Now} - Temperature: {dhtData.Temperature}, Humidity: {dhtData.Humidity}");
 
-                await SendDataToCloudAsync(reading);
+                ShouldITurnOnAirCondition(dhtData);
+
+                await SendDataToAzureAsync(dhtData);
                 await Blink();
             }
                         
@@ -103,23 +107,17 @@ namespace Temperature
 
             vm.PercentSuccess = 100d * ((double)vm.TotalSuccess / (double)vm.TotalAttempts);
             vm.LastUpdated = DateTime.Now;
-        }
+        }        
 
-        private async Task AddDeviceAsync()
-        {
-            var device = await registryManager.GetDeviceAsync(Config.deviceId);
-            Debug.WriteLine("Generated device key: {0}", device.Authentication.SymmetricKey.PrimaryKey);            
-        }
-
-        private async Task SendDataToCloudAsync(DhtReading data)
+        private async Task SendDataToAzureAsync(DhtReading dhtData)
         {
             var cloudData = new
             {
                 DeviceId = Config.deviceId,
-                Temperature = data.Temperature,
-                Humidity = data.Humidity,
+                Temperature = dhtData.Temperature,
+                Humidity = dhtData.Humidity,
                 Time = DateTime.Now,
-                RetryCount = data.RetryCount
+                RetryCount = dhtData.RetryCount
             };
 
             var messageString = JsonConvert.SerializeObject(cloudData);
@@ -146,14 +144,20 @@ namespace Temperature
                     switch (messageData)
                     {
                         case "TurnOn":
-                            relayPin.Write(GpioPinValue.Low);
-                            break;                        
+                            TurnOnRelay();
+                            break;
                         case "TurnOff":
-                            relayPin.Write(GpioPinValue.High);
-                            break;                        
+                            TurnOffRelay();
+                            break;
                     }
                 }
             }
+        }        
+
+        private void ShouldITurnOnAirCondition(DhtReading dhtData)
+        {
+            if ((dhtData.Temperature >= 24 || dhtData.Humidity >= 75) && !relayOn)
+                TurnOnRelay();            
         }
 
         private async Task Blink()
@@ -161,6 +165,24 @@ namespace Temperature
             ledPin.Write(GpioPinValue.Low);
             await Task.Delay(500);
             ledPin.Write(GpioPinValue.High);
+        }
+
+        private void TurnOffRelay()
+        {
+            lock(isRelayPin)
+            {
+                isRelayPin.Write(GpioPinValue.High);
+                relayOn = false;
+            }            
+        }
+
+        private void TurnOnRelay()
+        {
+            lock(isRelayPin)
+            {
+                isRelayPin.Write(GpioPinValue.Low);
+                relayOn = true;
+            }            
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
